@@ -30,28 +30,29 @@ export const Header = styled.header`
   }
 `;
 
-export const ListContainer = styled.div`
+export const ListHeader = styled.header`
   margin-top: 24px;
 
-  header {
-    margin-bottom: 8px;
+  margin-bottom: 8px;
 
-    button {
-      background: transparent;
-      border: none;
-      display: flex;
-      align-items: center;
-    }
+  button {
+    background: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+  }
 
-    span {
-      color: ${({ theme }) => theme.colors.primary.main};
-      margin-left: 8px;
-      font-weight: bold;
-    }
+  span {
+    color: ${({ theme }) => theme.colors.primary.main};
+    margin-left: 8px;
+    font-weight: bold;
+  }
 
-    img {
-      margin-left: 8px;
-    }
+  img {
+    transform: ${(p) =>
+      p.orderBy === "asc" ? "rotate(180deg)" : "rotate(0deg)"};
+    margin-left: 8px;
+    transition: transform 0.2s ease-in;
   }
 `;
 
