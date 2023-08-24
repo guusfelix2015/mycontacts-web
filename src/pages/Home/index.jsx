@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import arrow from "../../assets/images/icons/arrow.svg";
 import trash from "../../assets/images/icons/delete.svg";
 import edit from "../../assets/images/icons/edit.svg";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import formatPhone from "../../utils/formatPhone";
 
 export default function Home() {
@@ -17,11 +17,13 @@ export default function Home() {
   const [orderBy, setOrderBy] = useState("asc");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredContacts = contacts.filter((contact) => {
-    return contact.name
-      .toLocaleLowerCase()
-      .includes(searchTerm.toLocaleLowerCase());
-  });
+  const filteredContacts = useMemo(
+    () =>
+      contacts.filter((contact) =>
+        contact.name.toLowerCase().includes(searchTerm.toLocaleLowerCase())
+      ),
+    [contacts, searchTerm]
+  );
 
   useEffect(() => {
     fetch(`http://localhost:3001/contacts?orderBy=${orderBy}`)
