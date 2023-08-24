@@ -50,7 +50,7 @@ export const ListHeader = styled.header`
 
   img {
     transform: ${(p) =>
-      p.orderBy === "asc" ? "rotate(180deg)" : "rotate(0deg)"};
+      p.orderby === "asc" ? "rotate(180deg)" : "rotate(0deg)"};
     margin-left: 8px;
     transition: transform 0.2s ease-in;
   }
