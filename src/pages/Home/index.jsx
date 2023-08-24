@@ -11,11 +11,14 @@ import trash from "../../assets/images/icons/delete.svg";
 import edit from "../../assets/images/icons/edit.svg";
 import { useEffect, useState, useMemo } from "react";
 import formatPhone from "../../utils/formatPhone";
+import Loader from "../../components/Loader";
+import delay from "../../utils/delay";
 
 export default function Home() {
   const [contacts, setContacts] = useState([]);
   const [orderBy, setOrderBy] = useState("asc");
   const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const filteredContacts = useMemo(
     () =>
@@ -26,13 +29,18 @@ export default function Home() {
   );
 
   useEffect(() => {
+    setIsLoading(true)
     fetch(`http://localhost:3001/contacts?orderBy=${orderBy}`)
       .then(async (response) => {
+        await delay(400);
         const data = await response.json();
         setContacts(data);
       })
       .catch((error) => {
         console.debug("error", error);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, [orderBy]);
 
@@ -46,6 +54,8 @@ export default function Home() {
 
   return (
     <Container>
+      <Loader isLoading={isLoading} />
+
       <InputSearchContainer>
         <input
           onChange={handleChangeSearchTerm}
