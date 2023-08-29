@@ -1,4 +1,5 @@
 import delay from "./delay";
+import ApiError from "../errors/ApiError.js";
 
 class HttpClient {
   constructor(baseUrl) {
@@ -20,7 +21,7 @@ class HttpClient {
       return body;
     }
 
-    throw new Error(body?.error || `${response.status} - ${response.statusText}`);
+    throw new ApiError(response, body);
   }
 }
 

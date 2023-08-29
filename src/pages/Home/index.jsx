@@ -5,14 +5,15 @@ import {
   InputSearchContainer,
   ListHeader,
 } from "./styles";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import arrow from "../../assets/images/icons/arrow.svg";
 import trash from "../../assets/images/icons/delete.svg";
 import edit from "../../assets/images/icons/edit.svg";
-import { useEffect, useState, useMemo } from "react";
+import {useEffect, useState, useMemo} from "react";
 import formatPhone from "../../utils/formatPhone";
 import Loader from "../../components/Loader";
 import ContactsService from "../../services/ContactsService";
+import ApiError from "../../errors/ApiError.js";
 
 export default function Home() {
   const [contacts, setContacts] = useState([]);
@@ -34,14 +35,15 @@ export default function Home() {
         setIsLoading(true);
         const contactList = await ContactsService.listContacts(orderBy);
         setContacts(contactList);
-        setIsLoading(false);
       } catch (error) {
-        console.log(error);
-        console.log("caiu aq")
+        console.log("Name ->",error.name)
+        console.log("message", error.message)
+        console.log("Response:", error.response)
       } finally {
         setIsLoading(false);
       }
     }
+
     LoadContacts();
   }, [orderBy]);
 
@@ -55,7 +57,7 @@ export default function Home() {
 
   return (
     <Container>
-      <Loader isLoading={isLoading} />
+      <Loader isLoading={isLoading}/>
 
       <InputSearchContainer>
         <input
@@ -77,7 +79,7 @@ export default function Home() {
         <ListHeader orderby={orderBy}>
           <button type="button" onClick={handleToggleOrderBy}>
             <span>Nome</span>
-            <img src={arrow} alt="Arrow" />
+            <img src={arrow} alt="Arrow"/>
           </button>
         </ListHeader>
       )}
@@ -94,10 +96,10 @@ export default function Home() {
           </div>
           <div className="actions">
             <Link to={`/edit/${contact.id}`}>
-              <img src={edit} alt="Edit" />
+              <img src={edit} alt="Edit"/>
             </Link>
             <button>
-              <img src={trash} alt="Trash" />
+              <img src={trash} alt="Trash"/>
             </button>
           </div>
         </Card>
