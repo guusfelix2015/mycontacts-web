@@ -4,22 +4,26 @@ import {
   Header,
   InputSearchContainer,
   ListHeader,
+  ErrorContainer,
 } from "./styles";
-import {Link} from "react-router-dom";
+
+import { Link } from "react-router-dom";
 import arrow from "../../assets/images/icons/arrow.svg";
 import trash from "../../assets/images/icons/delete.svg";
 import edit from "../../assets/images/icons/edit.svg";
-import {useEffect, useState, useMemo} from "react";
+import { useEffect, useState, useMemo } from "react";
 import formatPhone from "../../utils/formatPhone";
 import Loader from "../../components/Loader";
 import ContactsService from "../../services/ContactsService";
-import ApiError from "../../errors/ApiError.js";
+import sad from "../../assets/images/sad.svg";
+import Button from "../../components/Button";
 
 export default function Home() {
   const [contacts, setContacts] = useState([]);
   const [orderBy, setOrderBy] = useState("asc");
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
 
   const filteredContacts = useMemo(
     () =>
@@ -36,9 +40,7 @@ export default function Home() {
         const contactList = await ContactsService.listContacts(orderBy);
         setContacts(contactList);
       } catch (error) {
-        console.log("Name ->",error.name)
-        console.log("message", error.message)
-        console.log("Response:", error.response)
+        setHasError(true);
       } finally {
         setIsLoading(false);
       }
@@ -57,7 +59,7 @@ export default function Home() {
 
   return (
     <Container>
-      <Loader isLoading={isLoading}/>
+      <Loader isLoading={isLoading} />
 
       <InputSearchContainer>
         <input
@@ -67,19 +69,31 @@ export default function Home() {
           placeholder="Pesquisar pelo nome.."
         />
       </InputSearchContainer>
-      <Header>
-        <strong>
-          {filteredContacts.length}{" "}
-          {filteredContacts.length > 1 ? "Contatos" : "Contato"}
-        </strong>
+      <Header hasError={hasError}>
+        {!hasError && (
+          <strong>
+            {filteredContacts.length}{" "}
+            {filteredContacts.length > 1 ? "Contatos" : "Contato"}
+          </strong>
+        )}
         <Link to="/new">Novo contato</Link>
       </Header>
+
+      {hasError && (
+        <ErrorContainer>
+          <img src={sad} alt="Rosto triste" />
+          <div className="details">
+            <strong>Ocorreu um erro ao obter os seus contatos!</strong>
+            <Button type="button">Tentar novamente</Button>
+          </div>
+        </ErrorContainer>
+      )}
 
       {filteredContacts.length > 0 && (
         <ListHeader orderby={orderBy}>
           <button type="button" onClick={handleToggleOrderBy}>
             <span>Nome</span>
-            <img src={arrow} alt="Arrow"/>
+            <img src={arrow} alt="Arrow" />
           </button>
         </ListHeader>
       )}
@@ -96,10 +110,10 @@ export default function Home() {
           </div>
           <div className="actions">
             <Link to={`/edit/${contact.id}`}>
-              <img src={edit} alt="Edit"/>
+              <img src={edit} alt="Edit" />
             </Link>
             <button>
-              <img src={trash} alt="Trash"/>
+              <img src={trash} alt="Trash" />
             </button>
           </div>
         </Card>

@@ -5,9 +5,12 @@ export const Container = styled.div`
 `;
 
 export const Header = styled.header`
+  border-bottom: 2px solid ${({ theme }) => theme.colors.gray[100]};
+  padding-bottom: 16px;
   margin-top: 32px;
   display: flex;
-  justify-content: space-between;
+  justify-content: ${({ hasError }) =>
+    hasError ? "flex-end" : "space-between"};
   align-items: center;
 
   strong {
@@ -121,5 +124,22 @@ export const InputSearchContainer = styled.div`
     &::placeholder {
       color: #bcbcbc;
     }
+  }
+`;
+
+export const ErrorContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 16px;
+
+  .details {
+    margin-left: 24px;
+  }
+
+  strong {
+    font-size: 22px;
+    color: ${({ theme }) => theme.colors.danger.main};
+    display: block;
+    margin-bottom: 9px;
   }
 `;
