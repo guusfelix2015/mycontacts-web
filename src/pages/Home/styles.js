@@ -9,8 +9,7 @@ export const Header = styled.header`
   padding-bottom: 16px;
   margin-top: 32px;
   display: flex;
-  justify-content: ${({ hasError }) =>
-    hasError ? "flex-end" : "space-between"};
+  justify-content: ${({ justifyContent }) => justifyContent};
   align-items: center;
 
   strong {
@@ -141,5 +140,22 @@ export const ErrorContainer = styled.div`
     color: ${({ theme }) => theme.colors.danger.main};
     display: block;
     margin-bottom: 9px;
+  }
+`;
+
+export const EmptyListContainer = styled.div`
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  p {
+    color: ${({ theme }) => theme.colors.gray[200]};
+    text-align: center;
+    margin-top: 8px;
+
+    strong {
+      color: ${({ theme }) => theme.colors.primary.main};
+    }
   }
 `;

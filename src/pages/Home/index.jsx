@@ -5,6 +5,7 @@ import {
   InputSearchContainer,
   ListHeader,
   ErrorContainer,
+  EmptyListContainer,
 } from "./styles";
 
 import { Link } from "react-router-dom";
@@ -17,6 +18,7 @@ import Loader from "../../components/Loader";
 import ContactsService from "../../services/ContactsService";
 import sad from "../../assets/images/sad.svg";
 import Button from "../../components/Button";
+import emptyBox from "../../assets/images/empty-box.svg";
 
 export default function Home() {
   const [contacts, setContacts] = useState([]);
@@ -44,7 +46,7 @@ export default function Home() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [orderBy]);
 
   useEffect(() => {
     loadContacts();
@@ -66,16 +68,27 @@ export default function Home() {
     <Container>
       <Loader isLoading={isLoading} />
 
-      <InputSearchContainer>
-        <input
-          onChange={handleChangeSearchTerm}
-          value={searchTerm}
-          type="text"
-          placeholder="Pesquisar pelo nome.."
-        />
-      </InputSearchContainer>
-      <Header hasError={hasError}>
-        {!hasError && (
+      {contacts.length > 0 && (
+        <InputSearchContainer>
+          <input
+            onChange={handleChangeSearchTerm}
+            value={searchTerm}
+            type="text"
+            placeholder="Pesquisar pelo nome.."
+          />
+        </InputSearchContainer>
+      )}
+
+      <Header
+        justifyContent={
+          hasError
+            ? "flex-end"
+            : contacts.length > 0
+            ? "space-between"
+            : "center"
+        }
+      >
+        {!hasError && contacts.length > 0 && (
           <strong>
             {filteredContacts.length}{" "}
             {filteredContacts.length > 1 ? "Contatos" : "Contato"}
@@ -98,6 +111,17 @@ export default function Home() {
 
       {!hasError && (
         <>
+          {contacts.length < 1 && !isLoading && (
+            <EmptyListContainer>
+              <img src={emptyBox} alt="Caixa roxa" />
+              <p>
+                Você ainda não tem nenhum contato cadastrado! Clique no botão{" "}
+                <strong>”Novo contato”</strong> à cima para cadastrar o seu
+                primeiro!
+              </p>
+            </EmptyListContainer>
+          )}
+
           {filteredContacts.length > 0 && (
             <ListHeader orderby={orderBy}>
               <button type="button" onClick={handleToggleOrderBy}>
