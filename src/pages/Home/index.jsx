@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import arrow from "../../assets/images/icons/arrow.svg";
 import trash from "../../assets/images/icons/delete.svg";
 import edit from "../../assets/images/icons/edit.svg";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import formatPhone from "../../utils/formatPhone";
 import Loader from "../../components/Loader";
 import ContactsService from "../../services/ContactsService";
@@ -33,7 +33,7 @@ export default function Home() {
     [contacts, searchTerm]
   );
 
-  async function loadContacts() {
+  const loadContacts = useCallback(async () => {
     try {
       setIsLoading(true);
       const contactList = await ContactsService.listContacts(orderBy);
@@ -44,11 +44,11 @@ export default function Home() {
     } finally {
       setIsLoading(false);
     }
-  }
+  }, []);
 
   useEffect(() => {
     loadContacts();
-  }, [orderBy]);
+  }, [loadContacts]);
 
   function handleToggleOrderBy() {
     setOrderBy((prevState) => (prevState === "asc" ? "desc" : "asc"));
