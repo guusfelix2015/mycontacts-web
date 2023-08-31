@@ -6,6 +6,7 @@ import {
   ListHeader,
   ErrorContainer,
   EmptyListContainer,
+  SearchNotFoundContainer
 } from "./styles";
 
 import { Link } from "react-router-dom";
@@ -19,6 +20,7 @@ import ContactsService from "../../services/ContactsService";
 import sad from "../../assets/images/sad.svg";
 import Button from "../../components/Button";
 import emptyBox from "../../assets/images/empty-box.svg";
+import magnifierQuestion from "../../assets/images/magnifier-question.svg";
 
 export default function Home() {
   const [contacts, setContacts] = useState([]);
@@ -120,6 +122,13 @@ export default function Home() {
                 primeiro!
               </p>
             </EmptyListContainer>
+          )}
+
+          {contacts.length > 0 && filteredContacts.length < 1 && (
+            <SearchNotFoundContainer>
+              <img src={magnifierQuestion} alt="Lupa com interrogação" />
+              <span>Nenhum resultado foi encontrado para <strong>{searchTerm}</strong>.</span>
+            </SearchNotFoundContainer>
           )}
 
           {filteredContacts.length > 0 && (
