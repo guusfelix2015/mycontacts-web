@@ -9,7 +9,7 @@ export const Header = styled.header`
   padding-bottom: 16px;
   margin-top: 32px;
   display: flex;
-  justify-content: ${({ justifyContent }) => justifyContent};
+  justify-content: ${({ justifycontent }) => justifycontent};
   align-items: center;
 
   strong {
