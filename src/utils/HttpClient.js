@@ -6,34 +6,36 @@ class HttpClient {
     this.baseUrl = baseUrl;
   }
 
-  async get(patch) {
-    await delay(400);
-    const response = await fetch(`${this.baseUrl}${patch}`);
-
-    let body = null;
-
-    const contentType = response.headers.get("Content-Type");
-    if (contentType.includes("application/json")) {
-      body = await response.json();
-    }
-
-    if (response.ok) {
-      return body;
-    }
-
-    throw new ApiError(response, body);
+  get(path, options) {
+    return this.makeRequest(path, { method: "GET", headers: options?.headers });
   }
 
-  async post(patch, body) {
+  post(path, options) {
+    this.makeRequest(path, {
+      method: "POST",
+      body: options?.body,
+      headers: options?.headers,
+    });
+  }
+
+  async makeRequest(path, options) {
     await delay(400);
 
-    const headers = new Headers({
-      "Content-Type": "application/json",
-    });
+    const headers = new Headers();
 
-    const response = await fetch(`${this.baseUrl}${patch}`, {
-      method: "POST",
-      body: JSON.stringify(body),
+    if (options.body) {
+      headers.append("Content-Type", "application/json");
+    }
+
+    if (options.headers) {
+      Object.entries(options.headers).forEach(([name, value]) => {
+        headers.append(name, value);
+      });
+    }
+
+    const response = await fetch(`${this.baseUrl}${path}`, {
+      method: options.method,
+      body: JSON.stringify(options.body),
       headers,
     });
 
