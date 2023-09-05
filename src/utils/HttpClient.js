@@ -23,6 +23,33 @@ class HttpClient {
 
     throw new ApiError(response, body);
   }
+
+  async post(patch, body) {
+    await delay(400);
+
+    const headers = new Headers({
+      "Content-Type": "application/json",
+    });
+
+    const response = await fetch(`${this.baseUrl}${patch}`, {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers,
+    });
+
+    let responseBody = null;
+
+    const contentType = response.headers.get("Content-Type");
+    if (contentType.includes("application/json")) {
+      responseBody = await response.json();
+    }
+
+    if (response.ok) {
+      return responseBody;
+    }
+
+    throw new ApiError(response, responseBody);
+  }
 }
 
 export default HttpClient;
