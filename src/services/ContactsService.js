@@ -6,12 +6,7 @@ class ContactsService {
   }
 
   async listContacts(orderBy = "asc") {
-    return this.HttpClient.get(`/contacts?orderBy=${orderBy}`, {
-      headers: {
-        Authorization: "meu-token",
-        OutroHeader: "opa"
-      },
-    });
+    return this.HttpClient.get(`/contacts?orderBy=${orderBy}`);
   }
 
   async createContacts(contact) {
