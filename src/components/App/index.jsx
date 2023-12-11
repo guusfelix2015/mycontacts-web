@@ -5,12 +5,14 @@ import { Container } from "./styles";
 import Header from "../Header";
 import MyRoutes from "../../Routes";
 import { BrowserRouter } from "react-router-dom";
+import ToastContainer from "../Toast/ToastContainer";
 
 function App() {
   return (
     <BrowserRouter>
       <ThemeProvider theme={defaultTheme}>
         <GlobalStyles />
+        <ToastContainer />
         <Container>
           <Header />
           <MyRoutes />

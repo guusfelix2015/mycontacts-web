@@ -12,9 +12,6 @@ export default function NewContact() {
         category_id: formData.categoryId,
       };
 
-
-
-
       const response = await ContactsService.createContacts(contact);
       return response;
     } catch {
